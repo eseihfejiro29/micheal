@@ -1,0 +1,1348 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clatras</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" href="uploads/favicon/fav.png" type="image/x-icon">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com/"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Alpine JS -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.0/dist/cdn.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .dark ::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #94a3b8;
+            border-radius: 3px;
+        }
+        .dark ::-webkit-scrollbar-thumb {
+            background: #475569;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        .dark ::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+       
+        /* Animations */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 4s ease-in-out infinite;
+        }
+       
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+       
+        .dark .glass {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+       
+        /* Gradient text */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(to right, #0ea5e9, #0284c7);
+        }
+       
+        .dark .text-gradient {
+            background-image: linear-gradient(to right, #38bdf8, #0ea5e9);
+        }
+        
+        /* Dark mode transitions */
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+    </style>
+</head>
+<body class="antialiased bg-slate-50 dark:bg-gray-900 text-slate-900 dark:text-gray-100 font-sans">
+
+    <!-- Dark Mode Toggle Button -->
+    <button
+        id="darkModeToggle"
+        class="fixed bottom-4 left-4 z-50 p-3 rounded-full bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700"
+        title="Toggle Dark Mode"
+        aria-label="Toggle between light and dark mode"
+    >
+        <!-- Sun icon (shown in dark mode) -->
+        <svg class="w-5 h-5 text-yellow-500 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"></path>
+        </svg>
+        
+        <!-- Moon icon (shown in light mode) -->
+        <svg class="w-5 h-5 text-blue-600 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+        </svg>
+    </button>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-40 glass border-b border-slate-200 dark:border-gray-700 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <img src="uploads/logos/1763725442_Screenshot_2025-11-21_124236-removebg-preview.png" alt="Clatras" class="h-8 sm:h-10 w-auto">
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex items-center space-x-4">
+                    <a href="#features" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800 transition-colors">
+                        Features
+                    </a>
+                    <a href="#wallet" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800 transition-colors">
+                        Wallet
+                    </a>
+                    <a href="#faq" class="px-3 py-2 rounded-md text-sm font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800 transition-colors">
+                        FAQ
+                    </a>
+                    <a href="account/auth/login.php" class="text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        Login
+                    </a>
+                    <a href="account/auth/register.php" class="ml-4 px-4 py-2 rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 dark:focus:ring-offset-gray-900 transition-all">
+                        Register
+                    </a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center" x-data="{ open: false }">
+                    <button @click="open = !open" class="inline-flex items-center justify-center p-2 rounded-md text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-primary-500">
+                        <span class="sr-only">Open main menu</span>
+                        <i data-lucide="menu" x-show="!open" class="h-6 w-6"></i>
+                        <i data-lucide="x" x-show="open" class="h-6 w-6" style="display: none;"></i>
+                    </button>
+                    
+                    <!-- Mobile menu -->
+                    <div x-show="open"
+                         x-transition:enter="transition ease-out duration-100"
+                         x-transition:enter-start="transform opacity-0 scale-95"
+                         x-transition:enter-end="transform opacity-100 scale-100"
+                         x-transition:leave="transition ease-in duration-75"
+                         x-transition:leave-start="transform opacity-100 scale-100"
+                         x-transition:leave-end="transform opacity-0 scale-95"
+                         class="absolute top-16 right-0 left-0 glass border-b border-slate-200 dark:border-gray-700 shadow-lg z-50 md:hidden"
+                         style="display: none;">
+                        <div class="px-2 pt-2 pb-3 space-y-1">
+                            <a href="#features" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800">
+                                Features
+                            </a>
+                            <a href="#wallet" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800">
+                                Wallet
+                            </a>
+                            <a href="#faq" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800">
+                                FAQ
+                            </a>
+                            <a href="account/auth/login.php" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-primary-50 dark:hover:bg-gray-800">
+                                Login
+                            </a>
+                            <a href="account/auth/register.php" class="block mx-2 mt-2 px-3 py-2 rounded-md text-base font-medium text-white bg-primary-600 hover:bg-primary-700 text-center">
+                                Register
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="relative overflow-hidden bg-gradient-to-b from-primary-50 dark:from-gray-800 to-white dark:to-gray-900">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-200 dark:bg-primary-800 rounded-full opacity-50 blur-3xl"></div>
+            <div class="absolute left-1/4 top-1/4 w-60 h-60 bg-primary-300 dark:bg-primary-700 rounded-full opacity-30 blur-3xl"></div>
+            <div class="absolute right-1/3 bottom-0 w-80 h-80 bg-primary-100 dark:bg-primary-900 rounded-full opacity-40 blur-3xl"></div>
+            
+            <!-- Grid Pattern -->
+            <div class="absolute inset-0 bg-grid-slate-100 dark:bg-grid-slate-800 [mask-image:linear-gradient(0deg,rgba(255,255,255,0.5),rgba(255,255,255,0.2))] dark:[mask-image:linear-gradient(0deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05))]" style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 32 32\' width=\'32\' height=\'32\' fill=\'none\' stroke=\'%23E2E8F0\'%3E%3Cpath d=\'M0 .5H31.5V32\'/%3E%3C/svg%3E')"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20 md:py-28 relative">
+            <div class="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+                <!-- Text Content -->
+                <div class="space-y-6 sm:space-y-8 text-center md:text-left">
+                    <div class="inline-flex items-center px-3 py-1 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-800 dark:text-primary-200 text-sm font-medium">
+                        <i data-lucide="sparkles" class="h-4 w-4 mr-2"></i>
+                        <span>Next Generation Crypto Wallet</span>
+                    </div>
+
+                    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
+                        <span class="block text-slate-900 dark:text-gray-100">Manage Your</span>
+                        <span class="text-gradient text-4xl sm:text-5xl md:text-6xl">Digital Assets</span>
+                        <span class="block text-slate-900 dark:text-gray-100">With Confidence</span>
+                    </h1>
+
+                    <p class="text-lg sm:text-xl text-slate-600 dark:text-gray-400 max-w-lg mx-auto md:mx-0">
+                        Experience a revolutionary way to manage your cryptocurrencies with unparalleled security, stunning visuals, and intuitive controls.
+                    </p>
+
+                    <!-- Fixed Buttons Section -->
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 w-full max-w-md mx-auto md:mx-0">
+                        <a href="account/auth/register.php" class="w-full sm:flex-1 px-6 py-3 text-center rounded-lg bg-primary-600 text-white font-medium shadow-lg shadow-primary-100 dark:shadow-primary-900/30 hover:bg-primary-700 hover:shadow-primary-200 dark:hover:shadow-primary-800/50 transition-all">
+                            Create Free Wallet
+                        </a>
+                        <a href="#features" class="w-full sm:flex-1 px-6 py-3 text-center rounded-lg bg-white dark:bg-gray-800 text-primary-700 dark:text-primary-300 font-medium border border-primary-200 dark:border-primary-700 shadow-sm hover:bg-primary-50 dark:hover:bg-gray-700 hover:border-primary-300 dark:hover:border-primary-600 transition-all">
+                            <span>Explore Features</span>
+                            <i data-lucide="arrow-right" class="inline-block h-4 w-4 ml-1"></i>
+                        </a>
+                    </div>
+
+                    <div class="flex items-center justify-center md:justify-start space-x-4 text-slate-600 dark:text-gray-400 text-sm">
+                        <div class="flex -space-x-2">
+                                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs font-bold text-white">
+                                    A
+                                </div>
+                                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs font-bold text-white">
+                                    B
+                                </div>
+                                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs font-bold text-white">
+                                    C
+                                </div>
+                                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 border-2 border-white dark:border-gray-900 flex items-center justify-center text-xs font-bold text-white">
+                                    D
+                                </div>
+                                                    </div>
+                        <span>Join 1M+ users worldwide</span>
+                    </div>
+                </div>
+                
+                <!-- Wallet Preview -->
+                <div class="relative mt-8 md:mt-0" x-data="{ activeTab: 'assets' }">
+                    <!-- Glow effects -->
+                    <div class="absolute -inset-0.5 bg-gradient-to-r from-primary-300 to-primary-600 rounded-3xl blur-xl opacity-30 animate-pulse"></div>
+                    
+                    <!-- Main wallet card -->
+                    <div class="relative bg-white dark:bg-gray-800 border border-slate-200 dark:border-gray-700 rounded-3xl p-4 sm:p-6 shadow-2xl">
+                        <!-- Decorative elements -->
+                        <div class="absolute -top-6 -right-6 w-24 h-24 bg-primary-200 dark:bg-primary-800 rounded-full blur-xl opacity-60"></div>
+                        <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-primary-300 dark:bg-primary-700 rounded-full blur-xl opacity-60"></div>
+                        
+                        <!-- Wallet header -->
+                        <div class="flex justify-between items-center mb-4 sm:mb-6">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-primary-500 to-primary-600 flex items-center justify-center text-white">
+                                    <i data-lucide="wallet" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                                </div>
+                                <div>
+                                    <div class="font-medium text-sm sm:text-base text-slate-900 dark:text-gray-100">Main Wallet</div>
+                                    <div class="text-xs text-slate-500 dark:text-gray-400">Connected</div>
+                                </div>
+                            </div>
+                            <div class="flex space-x-2">
+                                <div class="w-6 h-6 sm:w-8 sm:h-8 rounded-full bg-primary-50 dark:bg-primary-900 flex items-center justify-center text-primary-500 dark:text-primary-400">
+                                    <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Balance card -->
+                        <div class="bg-gradient-to-r from-primary-600 to-primary-700 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 text-white shadow-lg">
+                            <div class="text-xs sm:text-sm text-primary-100 mb-1">Total Balance</div>
+                            <div class="text-2xl sm:text-3xl font-bold mb-1">$27,892.47</div>
+                            <div class="flex items-center text-green-300 text-xs sm:text-sm">
+                                <i data-lucide="trending-up" class="h-3 w-3 sm:h-4 sm:w-4 mr-1"></i>
+                                +18.4% this week
+                            </div>
+                        </div>
+                        
+                        <!-- Tabs -->
+                        <div class="mb-4 sm:mb-6 border-b border-slate-200 dark:border-gray-700">
+                            <div class="flex space-x-4">
+                                <button @click="activeTab = 'assets'" :class="{'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500': activeTab === 'assets', 'text-slate-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400': activeTab !== 'assets'}" class="pb-2 px-1 font-medium text-xs sm:text-sm transition-colors">
+                                    <i data-lucide="credit-card" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                                    Assets
+                                </button>
+                                <button @click="activeTab = 'activity'" :class="{'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500': activeTab === 'activity', 'text-slate-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400': activeTab !== 'activity'}" class="pb-2 px-1 font-medium text-xs sm:text-sm transition-colors">
+                                    <i data-lucide="activity" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                                    Activity
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Assets Tab -->
+                        <div x-show="activeTab === 'assets'" class="space-y-3 sm:space-y-4">
+                            <!-- Bitcoin -->
+                            <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-3 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center text-white text-xs font-bold">
+                                            BTC
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-sm text-slate-900 dark:text-gray-100">Bitcoin</div>
+                                            <div class="text-xs text-slate-500 dark:text-gray-400">0.48 BTC</div>
+                                        </div>
+                                    </div>
+                                    <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                        <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Mini chart -->
+                                <div class="h-8 sm:h-10 mb-2">
+                                    <svg viewBox="0 0 100 30" class="w-full h-full">
+                                        <path d="M0,20 L10,18 L20,22 L30,15 L40,17 L50,10 L60,15 L70,8 L80,12 L90,5 L100,7" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                        <path d="M0,20 L10,18 L20,22 L30,15 L40,17 L50,10 L60,15 L70,8 L80,12 L90,5 L100,7 L100,30 L0,30 Z" fill="url(#btc-gradient)" stroke="none"></path>
+                                        <defs>
+                                            <linearGradient id="btc-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                                <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                                
+                                <div class="flex justify-between items-end">
+                                    <div class="font-bold text-sm text-slate-900 dark:text-gray-100">$14,302.40</div>
+                                    <div class="text-xs text-green-500">+2.4%</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Ethereum -->
+                            <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-3 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-md transition-all">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+                                            ETH
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-sm text-slate-900 dark:text-gray-100">Ethereum</div>
+                                            <div class="text-xs text-slate-500 dark:text-gray-400">3.72 ETH</div>
+                                        </div>
+                                    </div>
+                                    <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                        <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                    </button>
+                                </div>
+                                
+                                <!-- Mini chart -->
+                                <div class="h-8 sm:h-10 mb-2">
+                                    <svg viewBox="0 0 100 30" class="w-full h-full">
+                                        <path d="M0,15 L10,20 L20,10 L30,15 L40,12 L50,18 L60,8 L70,12 L80,5 L90,10 L100,3" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                        <path d="M0,15 L10,20 L20,10 L30,15 L40,12 L50,18 L60,8 L70,12 L80,5 L90,10 L100,3 L100,30 L0,30 Z" fill="url(#eth-gradient)" stroke="none"></path>
+                                        <defs>
+                                            <linearGradient id="eth-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                                <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                                <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                                
+                                <div class="flex justify-between items-end">
+                                    <div class="font-bold text-sm text-slate-900 dark:text-gray-100">$8,245.30</div>
+                                    <div class="text-xs text-green-500">+5.1%</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Activity Tab -->
+                        <div x-show="activeTab === 'activity'" class="space-y-3" style="display: none;">
+                            <!-- Transaction 1 -->
+                            <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-3 border border-slate-200 dark:border-gray-600">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 flex items-center justify-center">
+                                            <i data-lucide="arrow-down-left" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-sm text-slate-900 dark:text-gray-100">Received Bitcoin</div>
+                                            <div class="text-xs text-slate-500 dark:text-gray-400">2 hours ago • 0x3F8...9B2a</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-sm text-green-600 dark:text-green-400">+0.05 BTC</div>
+                                        <div class="text-xs text-slate-500 dark:text-gray-400">$1,502.25</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Transaction 2 -->
+                            <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-3 border border-slate-200 dark:border-gray-600">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-red-100 dark:bg-red-900 text-red-600 dark:text-red-400 flex items-center justify-center">
+                                            <i data-lucide="arrow-up-right" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-sm text-slate-900 dark:text-gray-100">Sent Ethereum</div>
+                                            <div class="text-xs text-slate-500 dark:text-gray-400">Yesterday • 0x7A1...4C3d</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-sm text-red-600 dark:text-red-400">-1.2 ETH</div>
+                                        <div class="text-xs text-slate-500 dark:text-gray-400">$2,654.40</div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Transaction 3 -->
+                            <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-3 border border-slate-200 dark:border-gray-600">
+                                <div class="flex justify-between items-center">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                                            <i data-lucide="repeat" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="font-medium text-sm text-slate-900 dark:text-gray-100">Swapped SOL → ETH</div>
+                                            <div class="text-xs text-slate-500 dark:text-gray-400">3 days ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <div class="font-bold text-sm text-slate-900 dark:text-gray-100">-10 SOL</div>
+                                        <div class="text-xs text-slate-500 dark:text-gray-400">$950.00</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Action buttons -->
+                        <div class="flex space-x-2 sm:space-x-3 mt-4 sm:mt-6">
+                            <button class="flex-1 bg-primary-600 hover:bg-primary-700 text-white py-2 px-3 sm:px-4 rounded-lg font-medium transition-colors flex items-center justify-center text-xs sm:text-sm">
+                                <i data-lucide="send" class="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2"></i>
+                                Send
+                            </button>
+                            <button class="flex-1 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-800 dark:text-gray-200 py-2 px-3 sm:px-4 rounded-lg font-medium transition-colors flex items-center justify-center text-xs sm:text-sm">
+                                <i data-lucide="download" class="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2"></i>
+                                Receive
+                            </button>
+                            <button class="flex-1 bg-slate-100 dark:bg-gray-700 hover:bg-slate-200 dark:hover:bg-gray-600 text-slate-800 dark:text-gray-200 py-2 px-3 sm:px-4 rounded-lg font-medium transition-colors flex items-center justify-center text-xs sm:text-sm">
+                                <i data-lucide="refresh-cw" class="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2"></i>
+                                Swap
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="py-8 sm:py-12 border-y border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 text-center">
+                <!-- Stat 1 -->
+                <div class="group">
+                    <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 group-hover:text-gradient transition-all">1M+</div>
+                    <p class="text-slate-600 dark:text-gray-400 mt-1 group-hover:text-slate-800 dark:group-hover:text-gray-200 transition-colors text-sm sm:text-base">Active Users</p>
+                </div>
+                
+                <!-- Stat 2 -->
+                <div class="group">
+                    <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 group-hover:text-gradient transition-all">50+</div>
+                    <p class="text-slate-600 dark:text-gray-400 mt-1 group-hover:text-slate-800 dark:group-hover:text-gray-200 transition-colors text-sm sm:text-base">Cryptocurrencies</p>
+                </div>
+                
+                <!-- Stat 3 -->
+                <div class="group">
+                    <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 group-hover:text-gradient transition-all">$0</div>
+                    <p class="text-slate-600 dark:text-gray-400 mt-1 group-hover:text-slate-800 dark:group-hover:text-gray-200 transition-colors text-sm sm:text-base">Transaction Fees</p>
+                </div>
+                
+                <!-- Stat 4 -->
+                <div class="group">
+                    <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-primary-600 dark:text-primary-400 group-hover:text-gradient transition-all">100%</div>
+                    <p class="text-slate-600 dark:text-gray-400 mt-1 group-hover:text-slate-800 dark:group-hover:text-gray-200 transition-colors text-sm sm:text-base">Secure</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 sm:py-24 bg-slate-50 dark:bg-gray-900 relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute right-0 top-1/4 w-96 h-96 bg-primary-100 dark:bg-primary-900 rounded-full opacity-50 blur-3xl -z-10"></div>
+            <div class="absolute -left-20 bottom-0 w-80 h-80 bg-primary-200 dark:bg-primary-800 rounded-full opacity-30 blur-3xl -z-10"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+                    <span class="text-slate-900 dark:text-gray-100">Why Choose Our </span>
+                    <span class="text-gradient">Wallet</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Experience the benefits of our secure and user-friendly cryptocurrency wallet.
+                </p>
+            </div>
+            
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                <!-- Feature 1 -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-slate-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 transition-all group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                        <i data-lucide="shield" class="h-6 w-6 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Quantum-Resistant Security</h3>
+                    <p class="text-slate-600 dark:text-gray-400 mb-4 text-sm sm:text-base">Our wallet uses post-quantum cryptography to ensure your assets remain secure even against future quantum computing threats.</p>
+                    <a href="#" class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm sm:text-base">
+                        Learn more
+                        <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-slate-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 transition-all group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                        <i data-lucide="globe" class="h-6 w-6 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Multi-Chain Support</h3>
+                    <p class="text-slate-600 dark:text-gray-400 mb-4 text-sm sm:text-base">Seamlessly manage assets across 50+ blockchains in one unified interface with real-time cross-chain analytics.</p>
+                    <a href="#" class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm sm:text-base">
+                        Learn more
+                        <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-slate-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 transition-all group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                        <i data-lucide="zap" class="h-6 w-6 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Lightning-Fast Transactions</h3>
+                    <p class="text-slate-600 dark:text-gray-400 mb-4 text-sm sm:text-base">Experience near-instant transactions with our optimized Layer-2 integration and advanced routing algorithms.</p>
+                    <a href="#" class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm sm:text-base">
+                        Learn more
+                        <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+                
+                <!-- Feature 4 -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-slate-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 transition-all group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                        <i data-lucide="refresh-cw" class="h-6 w-6 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Automated DeFi Strategies</h3>
+                    <p class="text-slate-600 dark:text-gray-400 mb-4 text-sm sm:text-base">Set up custom yield farming strategies that automatically rebalance your portfolio for maximum returns.</p>
+                    <a href="#" class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm sm:text-base">
+                        Learn more
+                        <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+                
+                <!-- Feature 5 -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-slate-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 transition-all group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                        <i data-lucide="wallet" class="h-6 w-6 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Self-Custody Solution</h3>
+                    <p class="text-slate-600 dark:text-gray-400 mb-4 text-sm sm:text-base">Maintain complete control of your private keys with our advanced multi-signature and social recovery options.</p>
+                    <a href="#" class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm sm:text-base">
+                        Learn more
+                        <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+                
+                <!-- Feature 6 -->
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl border border-slate-100 dark:border-gray-700 hover:border-primary-200 dark:hover:border-primary-600 hover:shadow-primary-100/50 dark:hover:shadow-primary-900/30 transition-all group">
+                    <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-primary-100 dark:bg-primary-900 flex items-center justify-center mb-4 sm:mb-5 group-hover:bg-primary-600 group-hover:text-white transition-colors">
+                        <i data-lucide="fingerprint" class="h-6 w-6 sm:h-7 sm:w-7 text-primary-600 dark:text-primary-400 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h3 class="text-lg sm:text-xl font-semibold mb-3 text-slate-900 dark:text-gray-100 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">Biometric Authentication</h3>
+                    <p class="text-slate-600 dark:text-gray-400 mb-4 text-sm sm:text-base">Secure your wallet with advanced biometric authentication including facial recognition and fingerprint scanning.</p>
+                    <a href="#" class="inline-flex items-center text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm sm:text-base">
+                        Learn more
+                        <i data-lucide="arrow-right" class="h-4 w-4 ml-1 transition-transform group-hover:translate-x-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wallet Section -->
+    <section id="wallet" class="py-16 sm:py-24 bg-white dark:bg-gray-800 relative overflow-hidden">
+        <!-- Background Elements -->
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute left-0 top-1/3 w-96 h-96 bg-primary-50 dark:bg-primary-900 rounded-full opacity-70 blur-3xl -z-10"></div>
+            <div class="absolute right-0 bottom-0 w-80 h-80 bg-primary-100 dark:bg-primary-800 rounded-full opacity-50 blur-3xl -z-10"></div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+                    <span class="text-gradient">Advanced Wallet</span>
+                    <span class="text-slate-900 dark:text-gray-100"> Interface</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Manage all your crypto assets in one place with our intuitive and secure wallet interface.
+                </p>
+            </div>
+            
+            <div class="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl border border-slate-200 dark:border-gray-700 overflow-hidden" x-data="{ activeTab: 'portfolio' }">
+                <!-- Wallet Header -->
+                <div class="bg-gradient-to-r from-primary-600 to-primary-700 text-white p-4 sm:p-6">
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                        <div class="flex items-center space-x-4 mb-4 md:mb-0">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                                <i data-lucide="wallet" class="h-5 w-5 sm:h-6 sm:w-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs sm:text-sm text-primary-100">Main Wallet</div>
+                                <div class="text-xl sm:text-2xl font-bold">$27,892.47</div>
+                                <div class="flex items-center text-green-300 text-xs sm:text-sm">
+                                    <i data-lucide="trending-up" class="h-3 w-3 mr-1"></i>
+                                    +18.4% this week
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button class="bg-white/10 hover:bg-white/20 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium backdrop-blur-sm transition-colors">
+                                <i data-lucide="plus" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                                Add Funds
+                            </button>
+                            <button class="bg-white text-primary-700 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-primary-50 transition-colors">
+                                <i data-lucide="send" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                                Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wallet Tabs -->
+                <div class="border-b border-slate-200 dark:border-gray-700">
+                    <div class="flex overflow-x-auto">
+                        <button @click="activeTab = 'portfolio'" :class="{'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500': activeTab === 'portfolio', 'text-slate-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400': activeTab !== 'portfolio'}" class="px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap">
+                            <i data-lucide="pie-chart" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                            Portfolio
+                        </button>
+                        <button @click="activeTab = 'assets'" :class="{'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500': activeTab === 'assets', 'text-slate-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400': activeTab !== 'assets'}" class="px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap">
+                            <i data-lucide="credit-card" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                            Assets
+                        </button>
+                        <button @click="activeTab = 'activity'" :class="{'text-primary-600 dark:text-primary-400 border-b-2 border-primary-500': activeTab === 'activity', 'text-slate-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400': activeTab !== 'activity'}" class="px-4 sm:px-6 py-3 sm:py-4 font-medium text-xs sm:text-sm transition-colors whitespace-nowrap">
+                            <i data-lucide="activity" class="h-3 w-3 sm:h-4 sm:w-4 inline-block mr-1"></i>
+                            Activity
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Portfolio Tab -->
+                <div x-show="activeTab === 'portfolio'" class="p-4 sm:p-6">
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Portfolio Chart -->
+                        <div class="lg:col-span-2 bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600">
+                            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-4">
+                                <h3 class="font-medium text-slate-900 dark:text-gray-100 mb-2 sm:mb-0">Portfolio Value</h3>
+                                <div class="flex space-x-2">
+                                    <button class="px-2 sm:px-3 py-1 rounded-full text-xs font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300">1D</button>
+                                    <button class="px-2 sm:px-3 py-1 rounded-full text-xs font-medium text-slate-600 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-gray-600">1W</button>
+                                    <button class="px-2 sm:px-3 py-1 rounded-full text-xs font-medium text-slate-600 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-gray-600">1M</button>
+                                    <button class="px-2 sm:px-3 py-1 rounded-full text-xs font-medium text-slate-600 dark:text-gray-400 hover:bg-slate-200 dark:hover:bg-gray-600">1Y</button>
+                                </div>
+                            </div>
+                            <div class="h-48 sm:h-64">
+                                <svg viewBox="0 0 100 40" class="w-full h-full">
+                                    <path d="M0,30 L5,28 L10,29 L15,26 L20,27 L25,25 L30,24 L35,22 L40,23 L45,20 L50,18 L55,16 L60,17 L65,15 L70,13 L75,14 L80,12 L85,10 L90,11 L95,8 L100,5" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                    <path d="M0,30 L5,28 L10,29 L15,26 L20,27 L25,25 L30,24 L35,22 L40,23 L45,20 L50,18 L55,16 L60,17 L65,15 L70,13 L75,14 L80,12 L85,10 L90,11 L95,8 L100,5 L100,40 L0,40 Z" fill="url(#portfolio-gradient)" stroke="none"></path>
+                                    <defs>
+                                        <linearGradient id="portfolio-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            <div class="flex justify-between text-xs sm:text-sm text-slate-500 dark:text-gray-400 mt-2">
+                                <span>Apr 10</span>
+                                <span class="hidden sm:inline">Apr 15</span>
+                                <span>Apr 20</span>
+                                <span class="hidden sm:inline">Apr 25</span>
+                                <span>Apr 30</span>
+                                <span class="hidden sm:inline">May 5</span>
+                                <span>May 10</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Allocation Chart -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600">
+                            <h3 class="font-medium text-slate-900 dark:text-gray-100 mb-4">Asset Allocation</h3>
+                            <div class="relative h-36 sm:h-48 mb-4">
+                                <svg viewBox="0 0 100 100" class="w-full h-full transform -rotate-90">
+                                    <circle cx="50" cy="50" r="45" fill="transparent" stroke="#e2e8f0" stroke-width="10"></circle>
+                                    <circle cx="50" cy="50" r="45" fill="transparent" stroke="#0ea5e9" stroke-width="10" stroke-dasharray="282.7" stroke-dashoffset="141.4"></circle>
+                                    <circle cx="50" cy="50" r="45" fill="transparent" stroke="#3b82f6" stroke-width="10" stroke-dasharray="282.7" stroke-dashoffset="226.2" transform="rotate(90, 50, 50)"></circle>
+                                    <circle cx="50" cy="50" r="45" fill="transparent" stroke="#f59e0b" stroke-width="10" stroke-dasharray="282.7" stroke-dashoffset="254.4" transform="rotate(180, 50, 50)"></circle>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <div class="text-center">
+                                        <div class="text-lg sm:text-2xl font-bold text-slate-900 dark:text-gray-100">$27,892</div>
+                                        <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">Total Value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-primary-500 mr-2"></div>
+                                        <span class="text-xs sm:text-sm text-slate-700 dark:text-gray-300">Bitcoin (50%)</span>
+                                    </div>
+                                    <span class="text-xs sm:text-sm font-medium text-slate-900 dark:text-gray-100">$14,302.40</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                                        <span class="text-xs sm:text-sm text-slate-700 dark:text-gray-300">Ethereum (30%)</span>
+                                    </div>
+                                    <span class="text-xs sm:text-sm font-medium text-slate-900 dark:text-gray-100">$8,245.30</span>
+                                </div>
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <div class="w-3 h-3 rounded-full bg-amber-500 mr-2"></div>
+                                        <span class="text-xs sm:text-sm text-slate-700 dark:text-gray-300">Others (20%)</span>
+                                    </div>
+                                    <span class="text-xs sm:text-sm font-medium text-slate-900 dark:text-gray-100">$5,344.77</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Assets Tab -->
+                <div x-show="activeTab === 'assets'" class="p-4 sm:p-6" style="display: none;">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Bitcoin -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-orange-500 to-yellow-500 flex items-center justify-center text-white text-xs font-bold">
+                                        BTC
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Bitcoin</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">0.48 BTC</div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Mini chart -->
+                            <div class="h-12 sm:h-16 mb-2">
+                                <svg viewBox="0 0 100 30" class="w-full h-full">
+                                    <path d="M0,20 L10,18 L20,22 L30,15 L40,17 L50,10 L60,15 L70,8 L80,12 L90,5 L100,7" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                    <path d="M0,20 L10,18 L20,22 L30,15 L40,17 L50,10 L60,15 L70,8 L80,12 L90,5 L100,7 L100,30 L0,30 Z" fill="url(#btc-gradient-2)" stroke="none"></path>
+                                    <defs>
+                                        <linearGradient id="btc-gradient-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            
+                            <div class="flex justify-between items-end">
+                                <div class="font-bold text-slate-900 dark:text-gray-100">$14,302.40</div>
+                                <div class="text-xs text-green-500">+2.4%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Ethereum -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold">
+                                        ETH
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Ethereum</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">3.72 ETH</div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Mini chart -->
+                            <div class="h-12 sm:h-16 mb-2">
+                                <svg viewBox="0 0 100 30" class="w-full h-full">
+                                    <path d="M0,15 L10,20 L20,10 L30,15 L40,12 L50,18 L60,8 L70,12 L80,5 L90,10 L100,3" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                    <path d="M0,15 L10,20 L20,10 L30,15 L40,12 L50,18 L60,8 L70,12 L80,5 L90,10 L100,3 L100,30 L0,30 Z" fill="url(#eth-gradient-2)" stroke="none"></path>
+                                    <defs>
+                                        <linearGradient id="eth-gradient-2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            
+                            <div class="flex justify-between items-end">
+                                <div class="font-bold text-slate-900 dark:text-gray-100">$8,245.30</div>
+                                <div class="text-xs text-green-500">+5.1%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Solana -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
+                                        SOL
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Solana</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">42.5 SOL</div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Mini chart -->
+                            <div class="h-12 sm:h-16 mb-2">
+                                <svg viewBox="0 0 100 30" class="w-full h-full">
+                                    <path d="M0,25 L10,20 L20,22 L30,18 L40,15 L50,10 L60,12 L70,8 L80,10 L90,5 L100,7" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                    <path d="M0,25 L10,20 L20,22 L30,18 L40,15 L50,10 L60,12 L70,8 L80,10 L90,5 L100,7 L100,30 L0,30 Z" fill="url(#sol-gradient)" stroke="none"></path>
+                                    <defs>
+                                        <linearGradient id="sol-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            
+                            <div class="flex justify-between items-end">
+                                <div class="font-bold text-slate-900 dark:text-gray-100">$3,825.00</div>
+                                <div class="text-xs text-green-500">+12.3%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cardano -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-blue-400 to-cyan-400 flex items-center justify-center text-white text-xs font-bold">
+                                        ADA
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Cardano</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">520 ADA</div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Mini chart -->
+                            <div class="h-12 sm:h-16 mb-2">
+                                <svg viewBox="0 0 100 30" class="w-full h-full">
+                                    <path d="M0,15 L10,18 L20,14 L30,20 L40,16 L50,18 L60,15 L70,20 L80,16 L90,18 L100,14" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                    <path d="M0,15 L10,18 L20,14 L30,20 L40,16 L50,18 L60,15 L70,20 L80,16 L90,18 L100,14 L100,30 L0,30 Z" fill="url(#ada-gradient)" stroke="none"></path>
+                                    <defs>
+                                        <linearGradient id="ada-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            
+                            <div class="flex justify-between items-end">
+                                <div class="font-bold text-slate-900 dark:text-gray-100">$624.00</div>
+                                <div class="text-xs text-red-500">-1.2%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Polkadot -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-md transition-all">
+                            <div class="flex justify-between items-start mb-4">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-pink-400 to-red-400 flex items-center justify-center text-white text-xs font-bold">
+                                        DOT
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Polkadot</div>
+                                        <div class="text-sm text-slate-500 dark:text-gray-400">85 DOT</div>
+                                    </div>
+                                </div>
+                                <button class="text-slate-400 dark:text-gray-500 hover:text-primary-500 dark:hover:text-primary-400">
+                                    <i data-lucide="arrow-up-right" class="h-4 w-4"></i>
+                                </button>
+                            </div>
+                            
+                            <!-- Mini chart -->
+                            <div class="h-12 sm:h-16 mb-2">
+                                <svg viewBox="0 0 100 30" class="w-full h-full">
+                                    <path d="M0,20 L10,18 L20,22 L30,20 L40,24 L50,18 L60,22 L70,18 L80,20 L90,16 L100,18" fill="none" stroke="#0ea5e9" stroke-width="2"></path>
+                                    <path d="M0,20 L10,18 L20,22 L30,20 L40,24 L50,18 L60,22 L70,18 L80,20 L90,16 L100,18 L100,30 L0,30 Z" fill="url(#dot-gradient)" stroke="none"></path>
+                                    <defs>
+                                        <linearGradient id="dot-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                                            <stop offset="0%" stop-color="#0ea5e9" stop-opacity="0.2"></stop>
+                                            <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+                                        </linearGradient>
+                                    </defs>
+                                </svg>
+                            </div>
+                            
+                            <div class="flex justify-between items-end">
+                                <div class="font-bold text-slate-900 dark:text-gray-100">$510.00</div>
+                                <div class="text-xs text-green-500">+0.8%</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Add New Asset -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-dashed border-slate-300 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 transition-all flex flex-col items-center justify-center text-center h-full min-h-[200px]">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-primary-100 dark:bg-primary-900 flex items-center justify-center text-primary-600 dark:text-primary-400 mb-3">
+                                <i data-lucide="plus" class="h-5 w-5 sm:h-6 sm:w-6"></i>
+                            </div>
+                            <h3 class="font-medium text-slate-900 dark:text-gray-100 mb-1">Add New Asset</h3>
+                            <p class="text-xs sm:text-sm text-slate-500 dark:text-gray-400 mb-3">Connect a new cryptocurrency to your wallet</p>
+                            <button class="px-3 sm:px-4 py-2 bg-primary-600 text-white rounded-lg text-xs sm:text-sm font-medium hover:bg-primary-700 transition-colors">
+                                Connect Asset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Activity Tab -->
+                <div x-show="activeTab === 'activity'" class="p-4 sm:p-6" style="display: none;">
+                    <div class="space-y-4">
+                        <!-- Transaction 1 -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-200 dark:hover:border-primary-500 transition-all">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 flex items-center justify-center">
+                                        <i data-lucide="arrow-down-left" class="h-5 w-5 sm:h-6 sm:w-6"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Received Bitcoin</div>
+                                        <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">2 hours ago • 0x3F8...9B2a</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-slate-900 dark:text-gray-100">-10 SOL</div>
+                                    <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">$950.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transaction 4 -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-200 dark:hover:border-primary-500 transition-all">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-purple-100 dark:bg-purple-900 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                                        <i data-lucide="landmark" class="h-5 w-5 sm:h-6 sm:w-6"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Staked Cardano</div>
+                                        <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">1 week ago</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-slate-900 dark:text-gray-100">-200 ADA</div>
+                                    <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">$240.00</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Transaction 5 -->
+                        <div class="bg-slate-50 dark:bg-gray-700 rounded-xl p-4 border border-slate-200 dark:border-gray-600 hover:border-primary-200 dark:hover:border-primary-500 transition-all">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-green-100 dark:bg-green-900 text-green-600 dark:text-green-400 flex items-center justify-center">
+                                        <i data-lucide="arrow-down-left" class="h-5 w-5 sm:h-6 sm:w-6"></i>
+                                    </div>
+                                    <div>
+                                        <div class="font-medium text-slate-900 dark:text-gray-100">Received Polkadot</div>
+                                        <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">2 weeks ago • 0x9E2...7F1b</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-bold text-green-600 dark:text-green-400">+25 DOT</div>
+                                    <div class="text-xs sm:text-sm text-slate-500 dark:text-gray-400">$150.00</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <div class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-12 sm:py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">Ready to Start Your Crypto Journey?</h2>
+            <p class="text-lg sm:text-xl mb-6 sm:mb-8 text-primary-100 max-w-3xl mx-auto">ISO 20022 is a global financial messaging standard powering the future of cross-border payments and the Quantum Financial System (QFS). Key compliant assets like XRP, XDC, XLM, ALGO, and IOTA are set to play major roles in this transition. These aren't just cryptocurrencies they're the backbone of the new digital financial era.
+
+Register on the quantum system and store your assets in the QFS ledger wallet</p>
+            <a href="account/auth/register.php" class="inline-block px-6 sm:px-8 py-3 sm:py-4 rounded-lg bg-white text-primary-700 font-medium text-base sm:text-lg shadow-lg hover:bg-primary-50 transition-colors">
+                Create Your Wallet Now
+            </a>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 sm:py-24 bg-slate-50 dark:bg-gray-900">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 sm:mb-16">
+                <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold mb-4">
+                    <span class="text-gradient">Frequently Asked</span>
+                    <span class="text-slate-900 dark:text-gray-100"> Questions</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-slate-600 dark:text-gray-400 max-w-3xl mx-auto">
+                    Find answers to common questions about our wallet services.
+                </p>
+            </div>
+            
+            <div class="space-y-4" x-data="{ active: null }">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
+                    <button 
+                        class="flex justify-between w-full px-4 sm:px-6 py-3 sm:py-4 text-left"
+                        @click="active !== 1 ? active = 1 : active = null"
+                    >
+                        <span class="font-medium text-base sm:text-lg text-slate-900 dark:text-gray-100 pr-4">How secure is my wallet?</span>
+                        <i 
+                            data-lucide="chevron-down" 
+                            class="h-5 w-5 text-slate-500 dark:text-gray-400 transition-transform flex-shrink-0" 
+                            :class="{'rotate-180': active === 1}"
+                        ></i>
+                    </button>
+                    <div 
+                        x-show="active === 1" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="px-4 sm:px-6 pb-3 sm:pb-4 text-slate-600 dark:text-gray-400 text-sm sm:text-base"
+                        style="display: none;"
+                    >
+                        Our wallet uses quantum-resistant encryption and security measures. You retain full control of your private keys, and we implement multi-signature technology for enhanced protection. We also offer two-factor authentication, biometric security options, and hardware wallet integration.
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
+                    <button 
+                        class="flex justify-between w-full px-4 sm:px-6 py-3 sm:py-4 text-left"
+                        @click="active !== 2 ? active = 2 : active = null"
+                    >
+                        <span class="font-medium text-base sm:text-lg text-slate-900 dark:text-gray-100 pr-4">What cryptocurrencies are supported?</span>
+                        <i 
+                            data-lucide="chevron-down" 
+                            class="h-5 w-5 text-slate-500 dark:text-gray-400 transition-transform flex-shrink-0" 
+                            :class="{'rotate-180': active === 2}"
+                        ></i>
+                    </button>
+                    <div 
+                        x-show="active === 2" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="px-4 sm:px-6 pb-3 sm:pb-4 text-slate-600 dark:text-gray-400 text-sm sm:text-base"
+                        style="display: none;"
+                    >
+                        We support over 50 cryptocurrencies including Bitcoin (BTC), Ethereum (ETH), Binance Coin (BNB), Solana (SOL), Cardano (ADA), and many more. We regularly add support for new currencies based on user demand and market trends.
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
+                    <button 
+                        class="flex justify-between w-full px-4 sm:px-6 py-3 sm:py-4 text-left"
+                        @click="active !== 3 ? active = 3 : active = null"
+                    >
+                        <span class="font-medium text-base sm:text-lg text-slate-900 dark:text-gray-100 pr-4">Are there any fees for using the wallet?</span>
+                        <i 
+                            data-lucide="chevron-down" 
+                            class="h-5 w-5 text-slate-500 dark:text-gray-400 transition-transform flex-shrink-0" 
+                            :class="{'rotate-180': active === 3}"
+                        ></i>
+                    </button>
+                    <div 
+                        x-show="active === 3" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="px-4 sm:px-6 pb-3 sm:pb-4 text-slate-600 dark:text-gray-400 text-sm sm:text-base"
+                        style="display: none;"
+                    >
+                        Creating and maintaining a wallet is completely free. There are no fees for sending or receiving crypto within our wallet network. For transactions on blockchain networks, standard network fees apply, which go to miners/validators of those networks, not to us.
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
+                    <button 
+                        class="flex justify-between w-full px-4 sm:px-6 py-3 sm:py-4 text-left"
+                        @click="active !== 4 ? active = 4 : active = null"
+                    >
+                        <span class="font-medium text-base sm:text-lg text-slate-900 dark:text-gray-100 pr-4">How do I recover my wallet if I lose my device?</span>
+                        <i 
+                            data-lucide="chevron-down" 
+                            class="h-5 w-5 text-slate-500 dark:text-gray-400 transition-transform flex-shrink-0" 
+                            :class="{'rotate-180': active === 4}"
+                        ></i>
+                    </button>
+                    <div 
+                        x-show="active === 4" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="px-4 sm:px-6 pb-3 sm:pb-4 text-slate-600 dark:text-gray-400 text-sm sm:text-base"
+                        style="display: none;"
+                    >
+                        During wallet setup, you'll receive a unique recovery phrase (seed phrase) that you should store securely offline. If you lose access to your device, you can use this recovery phrase to restore your wallet and all associated assets on a new device.
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl border border-slate-200 dark:border-gray-700 overflow-hidden shadow-sm">
+                    <button 
+                        class="flex justify-between w-full px-4 sm:px-6 py-3 sm:py-4 text-left"
+                        @click="active !== 5 ? active = 5 : active = null"
+                    >
+                        <span class="font-medium text-base sm:text-lg text-slate-900 dark:text-gray-100 pr-4">Can I earn interest on my crypto holdings?</span>
+                        <i 
+                            data-lucide="chevron-down" 
+                            class="h-5 w-5 text-slate-500 dark:text-gray-400 transition-transform flex-shrink-0" 
+                            :class="{'rotate-180': active === 5}"
+                        ></i>
+                    </button>
+                    <div 
+                        x-show="active === 5" 
+                        x-transition:enter="transition ease-out duration-200"
+                        x-transition:enter-start="opacity-0 -translate-y-2"
+                        x-transition:enter-end="opacity-100 translate-y-0"
+                        x-transition:leave="transition ease-in duration-150"
+                        x-transition:leave-start="opacity-100 translate-y-0"
+                        x-transition:leave-end="opacity-0 -translate-y-2"
+                        class="px-4 sm:px-6 pb-3 sm:pb-4 text-slate-600 dark:text-gray-400 text-sm sm:text-base"
+                        style="display: none;"
+                    >
+                        Yes, we offer various staking and yield farming options that allow you to earn interest on your crypto holdings. Rates vary by cryptocurrency and market conditions, with some assets earning up to 12% APY.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-slate-900 dark:bg-gray-800 text-white py-8 sm:py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+                <!-- Column 1 - Company -->
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Company</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">About Us</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Careers</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Blog</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Press</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 2 - Support -->
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Support</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Help Center</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Contact Us</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Community</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Status</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 3 - Legal -->
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Privacy Policy</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Terms of Service</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Cookie Policy</a></li>
+                        <li><a href="#" class="text-slate-300 dark:text-gray-400 hover:text-white dark:hover:text-gray-200 transition-colors text-sm sm:text-base">Compliance</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Column 4 - Newsletter -->
+                <div>
+                    <h3 class="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Stay Updated</h3>
+                    <p class="text-slate-300 dark:text-gray-400 mb-3 sm:mb-4 text-sm sm:text-base">Subscribe to our newsletter for the latest updates.</p>
+                    <form class="flex flex-col sm:flex-row gap-2">
+                        <input type="email" placeholder="Your email" class="flex-1 px-3 py-2 bg-slate-800 dark:bg-gray-700 text-white rounded-md border border-slate-700 dark:border-gray-600 focus:outline-none focus:border-primary-500 text-sm sm:text-base">
+                        <button type="submit" class="bg-primary-600 px-4 py-2 rounded-md hover:bg-primary-700 transition-colors">
+                            <i data-lucide="arrow-right" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-slate-800 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center text-center sm:text-left">
+                <div class="flex items-center mb-4 sm:mb-0">
+                                            <img src="uploads/logos/1763725442_Screenshot_2025-11-21_124236-removebg-preview.png" alt="Clatras" class="h-8 sm:h-10 w-auto filter brightness-0 invert">
+                                    </div>
+                
+                <div class="mb-4 sm:mb-0">
+                    <p class="text-slate-400 text-sm sm:text-base">&copy; 2026 Clatras. All rights reserved.</p>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <!-- Social Icons -->
+                    <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="twitter" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                    </a>
+                    <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="facebook" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                    </a>
+                    <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="instagram" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                    </a>
+                    <a href="#" class="text-slate-400 hover:text-white transition-colors">
+                        <i data-lucide="github" class="h-4 w-4 sm:h-5 sm:w-5"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Dark Mode & Lucide Icons Script -->
+    <script>
+        // ────────────────────────────────────────────────
+        // Dark mode functionality
+        // ────────────────────────────────────────────────
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const isDark = html.classList.contains('dark');
+            
+            if (isDark) {
+                html.classList.remove('dark');
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('darkMode', 'true');
+            }
+            
+            // Re-initialize Lucide icons after theme change
+            setTimeout(() => {
+                lucide.createIcons();
+            }, 50);
+        }
+
+        // Initialize when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attach click listener to toggle button
+            const toggleBtn = document.getElementById('darkModeToggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleDarkMode);
+            }
+
+            // Load saved preference or system preference
+            const saved = localStorage.getItem('darkMode');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+            if (saved === 'true' || (saved === null && prefersDark)) {
+                document.documentElement.classList.add('dark');
+            }
+
+            // Listen for system theme changes (when no user preference saved)
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+                if (localStorage.getItem('darkMode') === null) {
+                    document.documentElement.classList.toggle('dark', e.matches);
+                }
+            });
+
+            // Initialize Lucide icons
+            lucide.createIcons();
+        });
+    </script>
+
+    <!-- Telegram floating button (from your original code) -->
+    <style>
+      #telegram-chat {
+        position: fixed;
+        bottom: 60px;
+        left: 20px;
+        z-index: 9999;
+        background-color: #0088cc;
+        border-radius: 50%;
+        padding: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+      }
+      #telegram-chat:hover {
+        transform: scale(1.1);
+      }
+      #telegram-chat img {
+        width: 32px;
+        height: 32px;
+      }
+    </style>
+
+</body>
+</html>
