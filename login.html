@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Log in to Love Doctor to access marriage guidance, events, and contact tools.">
+  <title>Login | Love Doctor</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="page-auth">
+  <header class="site-header">
+    <a class="brand" href="index.html" aria-label="Love Doctor home">
+      <img src="images/4-transparent.png" alt="Love Doctor logo">
+      <span>Love Doctor</span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="siteNav">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <nav class="site-nav" id="siteNav" aria-label="Primary navigation">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="marriage.html">Marriage Guidance</a>
+      <a href="events.html">Events</a>
+      <a href="contact.html">Contact</a>
+      <a class="nav-action auth-link active" href="login.html">Login</a>
+    </nav>
+  </header>
+
+  <main class="auth-main">
+    <section class="auth-shell">
+      <div class="auth-showcase" data-reveal>
+        <p class="section-kicker">Welcome Back</p>
+        <h1>Sign in to continue your Love Doctor journey</h1>
+        <p class="section-text">
+          Access guidance, events, and your saved experience with a calm, secure front-end login.
+        </p>
+      </div>
+
+      <div class="auth-card" data-reveal>
+        <p class="section-kicker">Login</p>
+        <form id="loginForm" class="auth-form">
+          <label for="loginEmail">Email</label>
+          <input id="loginEmail" type="email" placeholder="you@example.com" required>
+
+          <label for="loginPassword">Password</label>
+          <input id="loginPassword" type="password" placeholder="Your password" required>
+
+          <button class="button button-primary" type="submit">Log In</button>
+          <p class="form-status" id="loginStatus" role="status" aria-live="polite"></p>
+        </form>
+
+        <p class="helper-text">New here? <a class="text-link" href="signup.html">Create an account</a></p>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
